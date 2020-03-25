@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "kube-deployer.fullname" . }}-test-connection"
+  labels:
+    {{- include "kube-deployer.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "kube-deployer.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
